@@ -1,22 +1,39 @@
 const path = require('path')
 
-/** @type import('webpack').Configuration */
+/**
+ * @type {Configuration}
+ */
 const config = {
-  // mode: 'production',
   mode: 'development',
-  entry: './src/sample.js',
+  entry: ['react-hot-loader/patch', './src/index.js'],
   output: {
     path: path.resolve(__dirname, 'dist'),
+    publicPath: '/js/',
     filename: 'bundle.js',
   },
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.(js|jsx)$/,
         use: 'babel-loader',
         exclude: /node_modules/,
       },
     ],
+  },
+  resolve: {
+    extensions: ['.js', '.jsx'],
+    alias: {
+      'react-dom': '@hot-loader/react-dom',
+    },
+  },
+  devtool: 'inline-source-map',
+  devServer: {
+    open: true,
+    openPage: 'index.html',
+    contentBase: path.join(__dirname, 'public'),
+    watchContentBase: true,
+    port: 3000,
+    publicPath: '/dist/',
   },
 }
 
