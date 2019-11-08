@@ -15,3 +15,7 @@ export function vw(v) {
 
   return (v * w) / 100
 }
+
+export const getRadian = angle => angle * (Math.PI / 180)
+
+export const randomAngle = () => Math.floor(Math.random() * 360)
