@@ -1,47 +1,40 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React from 'react'
 import { useSpring, animated, useTrail } from 'react-spring'
 import _ from 'lodash'
 import 'core-js/stable'
 import 'regenerator-runtime/runtime'
-import { getRadian, randomAngle, vh, vw } from './utility'
+import { getRadian, vh, vw } from './utility'
+import Meter from './Meter'
+import {
+  r,
+  vh50,
+  vw50,
+  titleBgColor,
+  mainColor,
+  subColor,
+  red,
+  blueSkeleton,
+  redSkeleton,
+} from './consts'
+import CenterGraph from './CenterGraph'
 
 const value = 40
 const titleStr = 'Multitude Meter'
 
-const mainColor = 'rgb(29 ,233 ,192)' // 29 233 192
-const mainColorSkeleton = 'rgba(88,255,223,0.8)' // 29 233 192
-const subColor = 'rgba(4 ,93 ,86)' //  '#045D56' // 4 93 86
-const subColorLite = '#04d7d0'
-const blueSkeleton = 'rgba(57, 163, 235, 0.4)'
-const red = 'rgb(255, 82, 82)'
-const redSkeleton = 'rgba(255, 82, 82, 0.4)'
-const titleBgColor = 'rgba(207, 216, 220 , 0.3)'
-
-const vh50 = Math.floor(vh(50))
 const vh100 = Math.floor(vh(100))
-const vw50 = Math.floor(vw(50))
 const vw100 = Math.floor(vw(100))
 
 const bgPointsSideSpacing = Math.floor(vw100 / 10)
 const bgPointsVerticalSpacing = Math.floor(vh100 / 10)
 
-const r = vw(10)
-const circumference = r * 2 * Math.PI
-
-const circlePath = `M ${vw50},${vh50 - r}
-a ${r} ${r} 0 0 1 0,${r * 2}
-a ${r} ${r} 0 0 1 0,-${r * 2}`
-
 const innerCircleR = Math.floor(r / 3)
 
 const meterDecorationItems = _.range(13)
+const bgPoints = _.range(20).map(v => _.range(20))
 const centerGraphItems1 = _.range(30).map(v => v * 3)
 const centerGraphItems2 = _.range(30, 60).map(v => v * 3)
 const centerGraphItems3 = _.range(60, 90).map(v => v * 3)
 const centerGraphItems4 = _.range(90, 120).map(v => v * 3)
-
-const centerGraphMaxHeight = 40
-const centerGraphMinHeight = 7
 
 const titleOpacityParams = {
   range: [0, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 0.9, 1],
@@ -61,35 +54,7 @@ const innerTriangle = innerCircleR * 1.75
 const outTriangle = innerCircleR * 2.2
 const triangleLength = 4
 
-const MainMeter = ({ percentage, color }) => {
-  return (
-    <React.Fragment>
-      <animated.path
-        strokeWidth="5"
-        strokeDasharray={percentage.interpolate(x => {
-          if (x <= 100) {
-            return ` ${(circumference / 100) * x} , ${circumference -
-              (circumference / 100) * x} `
-          }
-          if (x <= 200) {
-            return `0 , ${(circumference / 100) * (x - 100)} , ${circumference -
-              (circumference / 100) * (x - 100)} `
-          }
-
-          return `${(circumference / 100) * (x - 200)} , ${circumference -
-            (circumference / 100) * (x - 200)} `
-        })}
-        stroke={color}
-        fill="none"
-        d={circlePath}
-      />
-    </React.Fragment>
-  )
-}
-
 export default function App() {
-  // TODO 関数の外に出す
-  const [bgPoints, setBgPoints] = useState(_.range(20).map(arr => _.range(20)))
   const bgPointTrails = useTrail(bgPoints.length, {
     delay: 2000,
     from: { opacity: 0, spacing: 1 },
@@ -292,77 +257,6 @@ export default function App() {
     },
   })
 
-  const centerGraphSpring1 = useSpring({
-    delay: 8000,
-    from: { random: 0, opacity: 0 },
-    to: async next => {
-      while (true) {
-        await next({
-          random: Math.random(),
-          opacity: 1,
-        })
-        await next({
-          random: 0,
-          opacity: 1,
-        })
-      }
-    },
-    config: { mass: 2, tension: 4000, friction: 150, clamp: true },
-  })
-
-  const centerGraphSpring2 = useSpring({
-    delay: 8200,
-    from: { random: 0, opacity: 0 },
-    to: async next => {
-      while (true) {
-        await next({
-          random: Math.random(),
-          opacity: 1,
-        })
-        await next({
-          random: 0,
-          opacity: 1,
-        })
-      }
-    },
-    config: { mass: 2, tension: 4000, friction: 150, clamp: true },
-  })
-
-  const centerGraphSpring3 = useSpring({
-    delay: 8400,
-    from: { random: 0, opacity: 0 },
-    to: async next => {
-      while (true) {
-        await next({
-          random: Math.random(),
-          opacity: 1,
-        })
-        await next({
-          random: 0,
-          opacity: 1,
-        })
-      }
-    },
-    config: { mass: 2, tension: 4000, friction: 150, clamp: true },
-  })
-  const centerGraphSpring4 = useSpring({
-    delay: 8600,
-    from: { random: 0, opacity: 0 },
-    to: async next => {
-      while (true) {
-        await next({
-          random: Math.random(),
-          opacity: 1,
-        })
-        await next({
-          random: 0,
-          opacity: 1,
-        })
-      }
-    },
-    config: { mass: 2, tension: 4000, friction: 150, clamp: true },
-  })
-
   const meterDecorationTrails = useTrail(meterDecorationItems.length, {
     delay: 5000,
     from: {
@@ -530,9 +424,9 @@ export default function App() {
       </g>
 
       {/* メーター */}
-      <MainMeter color="white" percentage={meterSpring.bgPercentage} />
-      <MainMeter color={mainColor} percentage={meterSpring.mainPercentage} />
-      <MainMeter color={subColor} percentage={meterSpring.subPercentage} />
+      <Meter color="white" percentage={meterSpring.bgPercentage} />
+      <Meter color={mainColor} percentage={meterSpring.mainPercentage} />
+      <Meter color={subColor} percentage={meterSpring.subPercentage} />
 
       {/* パーセンテージをテキストで表示 */}
       <animated.text
@@ -649,102 +543,32 @@ export default function App() {
           },
         )}
       />
-      {centerGraphItems1.map(angle => {
-        return (
-          <animated.rect
-            key={angle}
-            opacity={centerGraphSpring1.opacity}
-            width={1}
-            height={centerGraphSpring1.random.interpolate(x => {
-              const diff = Math.abs(angle - 45)
 
-              const result = centerGraphMaxHeight * ((30 - diff) / 30) * x
-
-              return result > centerGraphMinHeight
-                ? result
-                : centerGraphMinHeight
-            })}
-            x={vw50 + innerCircleR * Math.cos(getRadian(angle))}
-            y={vh50 - innerCircleR * Math.sin(getRadian(angle))}
-            fill={redSkeleton}
-            transform={`rotate(${Math.abs(angle - 90)} ${vw50 +
-              innerCircleR * Math.cos(getRadian(angle))}  ${vh50 -
-              innerCircleR * Math.sin(getRadian(angle))})`}
-          />
-        )
-      })}
-      {centerGraphItems2.map(angle => {
-        return (
-          <animated.rect
-            key={angle}
-            opacity={centerGraphSpring2.opacity}
-            width={1}
-            height={centerGraphSpring2.random.interpolate(x => {
-              const diff = Math.abs(angle - 135)
-
-              const result = centerGraphMaxHeight * ((30 - diff) / 30) * x
-
-              return result > centerGraphMinHeight
-                ? result
-                : centerGraphMinHeight
-            })}
-            x={vw50 + innerCircleR * Math.cos(getRadian(angle))}
-            y={vh50 - innerCircleR * Math.sin(getRadian(angle))}
-            fill={redSkeleton}
-            transform={`rotate(${-(angle - 90)} ${vw50 +
-              innerCircleR * Math.cos(getRadian(angle))}  ${vh50 -
-              innerCircleR * Math.sin(getRadian(angle))})`}
-          />
-        )
-      })}
-      {centerGraphItems3.map(angle => {
-        return (
-          <animated.rect
-            key={angle}
-            opacity={centerGraphSpring3.opacity}
-            width={1}
-            height={centerGraphSpring3.random.interpolate(x => {
-              const diff = Math.abs(angle - 225)
-
-              const result = centerGraphMaxHeight * ((30 - diff) / 30) * x
-
-              return result > centerGraphMinHeight
-                ? result
-                : centerGraphMinHeight
-            })}
-            x={vw50 + innerCircleR * Math.cos(getRadian(angle))}
-            y={vh50 - innerCircleR * Math.sin(getRadian(angle))}
-            fill={redSkeleton}
-            transform={`rotate(${-(angle - 90)} ${vw50 +
-              innerCircleR * Math.cos(getRadian(angle))}  ${vh50 -
-              innerCircleR * Math.sin(getRadian(angle))})`}
-          />
-        )
-      })}
-      {centerGraphItems4.map(angle => {
-        return (
-          <animated.rect
-            key={angle}
-            opacity={centerGraphSpring3.opacity}
-            width={1}
-            height={centerGraphSpring4.random.interpolate(x => {
-              const diff = Math.abs(angle - 315)
-
-              const result = centerGraphMaxHeight * ((30 - diff) / 30) * x
-
-              return result > centerGraphMinHeight
-                ? result
-                : centerGraphMinHeight
-            })}
-            x={vw50 + innerCircleR * Math.cos(getRadian(angle))}
-            y={vh50 - innerCircleR * Math.sin(getRadian(angle))}
-            fill={redSkeleton}
-            transform={`rotate(${-(angle - 90)} ${vw50 +
-              innerCircleR * Math.cos(getRadian(angle))}  ${vh50 -
-              innerCircleR * Math.sin(getRadian(angle))})`}
-          />
-        )
-      })}
+      {/* 中央の赤いインジケーターみたいなやつ */}
+      <CenterGraph
+        delay={8000}
+        centerGraphItems={centerGraphItems1}
+        getRotate={angle => Math.abs(angle - 90)}
+        threshold={45}
+      />
+      <CenterGraph
+        delay={8200}
+        centerGraphItems={centerGraphItems2}
+        getRotate={angle => -(angle - 90)}
+        threshold={135}
+      />
+      <CenterGraph
+        delay={8400}
+        centerGraphItems={centerGraphItems3}
+        getRotate={angle => -(angle - 90)}
+        threshold={225}
+      />
+      <CenterGraph
+        delay={8600}
+        centerGraphItems={centerGraphItems4}
+        getRotate={angle => -(angle - 90)}
+        threshold={315}
+      />
 
       {/* 回転してるやつ */}
       {meterDecorationTrails.map(({ triangleOpacity }, i) => {

@@ -55,10 +55,9 @@ module.exports = {
     'react/jsx-filename-extension': [
       'error',
       {
-        extensions: ['js']
+        extensions: ['js', 'jsx']
       }
     ],
-    'react/jsx-fragments': [0],
     'react/jsx-one-expression-per-line': 'off',
     'react/jsx-uses-react': 'error',
     'react/jsx-uses-vars': 'error',
