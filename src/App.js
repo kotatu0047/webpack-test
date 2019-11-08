@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useSpring, animated, useTrail } from 'react-spring'
 import _ from 'lodash'
 import 'core-js/stable'
@@ -35,6 +35,13 @@ a ${r} ${r} 0 0 1 0,-${r * 2}`
 const innerCircleR = Math.floor(r / 3)
 
 const meterDecorationItems = _.range(13)
+const centerGraphItems1 = _.range(30).map(v => v * 3)
+const centerGraphItems2 = _.range(30, 60).map(v => v * 3)
+const centerGraphItems3 = _.range(60, 90).map(v => v * 3)
+const centerGraphItems4 = _.range(90, 120).map(v => v * 3)
+
+const centerGraphMaxHeight = 40
+const centerGraphMinHeight = 7
 
 const titleOpacityParams = {
   range: [0, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 0.9, 1],
@@ -285,20 +292,75 @@ export default function App() {
     },
   })
 
-  const centerGraphTrails = useTrail(meterDecorationItems.length, {
-    delay: 0,
-    from: { topAngle: randomAngle() },
+  const centerGraphSpring1 = useSpring({
+    delay: 8000,
+    from: { random: 0, opacity: 0 },
     to: async next => {
       while (true) {
         await next({
-          topAngle: randomAngle(),
+          random: Math.random(),
+          opacity: 1,
         })
         await next({
-          topAngle: randomAngle(),
+          random: 0,
+          opacity: 1,
         })
       }
     },
-    config: { mass: 2, tension: 1000, friction: 50 },
+    config: { mass: 2, tension: 4000, friction: 150, clamp: true },
+  })
+
+  const centerGraphSpring2 = useSpring({
+    delay: 8200,
+    from: { random: 0, opacity: 0 },
+    to: async next => {
+      while (true) {
+        await next({
+          random: Math.random(),
+          opacity: 1,
+        })
+        await next({
+          random: 0,
+          opacity: 1,
+        })
+      }
+    },
+    config: { mass: 2, tension: 4000, friction: 150, clamp: true },
+  })
+
+  const centerGraphSpring3 = useSpring({
+    delay: 8400,
+    from: { random: 0, opacity: 0 },
+    to: async next => {
+      while (true) {
+        await next({
+          random: Math.random(),
+          opacity: 1,
+        })
+        await next({
+          random: 0,
+          opacity: 1,
+        })
+      }
+    },
+    config: { mass: 2, tension: 4000, friction: 150, clamp: true },
+  })
+  const centerGraphSpring4 = useSpring({
+    delay: 8600,
+    from: { random: 0, opacity: 0 },
+    to: async next => {
+      while (true) {
+        await next({
+          random: Math.random(),
+          opacity: 1,
+        })
+        await next({
+          random: 0,
+          opacity: 1,
+        })
+      }
+    },
+    config: { mass: 2, tension: 4000, friction: 150, clamp: true },
   })
 
   const meterDecorationTrails = useTrail(meterDecorationItems.length, {
@@ -509,12 +571,11 @@ export default function App() {
         / 100
       </text>
 
-      {/* メーターの装飾 */}
+      {/* メーター内側の円 */}
       <animated.path
         strokeWidth="1"
         stroke={red}
         fill="none"
-        strokeDasharray="4,4"
         d={meterDecorationSpring.innerCircleR.interpolate(
           x => `M ${vw50},${vh50 - x}
                 a ${x} ${x} 0 0 1 0,${x * 2}
@@ -588,6 +649,102 @@ export default function App() {
           },
         )}
       />
+      {centerGraphItems1.map(angle => {
+        return (
+          <animated.rect
+            key={angle}
+            opacity={centerGraphSpring1.opacity}
+            width={1}
+            height={centerGraphSpring1.random.interpolate(x => {
+              const diff = Math.abs(angle - 45)
+
+              const result = centerGraphMaxHeight * ((30 - diff) / 30) * x
+
+              return result > centerGraphMinHeight
+                ? result
+                : centerGraphMinHeight
+            })}
+            x={vw50 + innerCircleR * Math.cos(getRadian(angle))}
+            y={vh50 - innerCircleR * Math.sin(getRadian(angle))}
+            fill={redSkeleton}
+            transform={`rotate(${Math.abs(angle - 90)} ${vw50 +
+              innerCircleR * Math.cos(getRadian(angle))}  ${vh50 -
+              innerCircleR * Math.sin(getRadian(angle))})`}
+          />
+        )
+      })}
+      {centerGraphItems2.map(angle => {
+        return (
+          <animated.rect
+            key={angle}
+            opacity={centerGraphSpring2.opacity}
+            width={1}
+            height={centerGraphSpring2.random.interpolate(x => {
+              const diff = Math.abs(angle - 135)
+
+              const result = centerGraphMaxHeight * ((30 - diff) / 30) * x
+
+              return result > centerGraphMinHeight
+                ? result
+                : centerGraphMinHeight
+            })}
+            x={vw50 + innerCircleR * Math.cos(getRadian(angle))}
+            y={vh50 - innerCircleR * Math.sin(getRadian(angle))}
+            fill={redSkeleton}
+            transform={`rotate(${-(angle - 90)} ${vw50 +
+              innerCircleR * Math.cos(getRadian(angle))}  ${vh50 -
+              innerCircleR * Math.sin(getRadian(angle))})`}
+          />
+        )
+      })}
+      {centerGraphItems3.map(angle => {
+        return (
+          <animated.rect
+            key={angle}
+            opacity={centerGraphSpring3.opacity}
+            width={1}
+            height={centerGraphSpring3.random.interpolate(x => {
+              const diff = Math.abs(angle - 225)
+
+              const result = centerGraphMaxHeight * ((30 - diff) / 30) * x
+
+              return result > centerGraphMinHeight
+                ? result
+                : centerGraphMinHeight
+            })}
+            x={vw50 + innerCircleR * Math.cos(getRadian(angle))}
+            y={vh50 - innerCircleR * Math.sin(getRadian(angle))}
+            fill={redSkeleton}
+            transform={`rotate(${-(angle - 90)} ${vw50 +
+              innerCircleR * Math.cos(getRadian(angle))}  ${vh50 -
+              innerCircleR * Math.sin(getRadian(angle))})`}
+          />
+        )
+      })}
+      {centerGraphItems4.map(angle => {
+        return (
+          <animated.rect
+            key={angle}
+            opacity={centerGraphSpring3.opacity}
+            width={1}
+            height={centerGraphSpring4.random.interpolate(x => {
+              const diff = Math.abs(angle - 315)
+
+              const result = centerGraphMaxHeight * ((30 - diff) / 30) * x
+
+              return result > centerGraphMinHeight
+                ? result
+                : centerGraphMinHeight
+            })}
+            x={vw50 + innerCircleR * Math.cos(getRadian(angle))}
+            y={vh50 - innerCircleR * Math.sin(getRadian(angle))}
+            fill={redSkeleton}
+            transform={`rotate(${-(angle - 90)} ${vw50 +
+              innerCircleR * Math.cos(getRadian(angle))}  ${vh50 -
+              innerCircleR * Math.sin(getRadian(angle))})`}
+          />
+        )
+      })}
 
       {/* 回転してるやつ */}
       {meterDecorationTrails.map(({ triangleOpacity }, i) => {
