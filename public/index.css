@@ -66,3 +66,43 @@ body,
     transform: rotate(360deg);
   }
 }
+
+.Border {
+  fill: none;
+  stroke: blue;
+  stroke-width: 1
+}
+
+.Connect {
+  fill: none;
+  stroke: #888888;
+  stroke-width: 2
+}
+
+.SamplePath {
+  fill: none;
+  stroke: red;
+  stroke-width: 5
+}
+
+.EndPoint {
+  fill: none;
+  stroke: #888888;
+  stroke-width: 2
+}
+
+.CtlPoint {
+  fill: #888888;
+  stroke: none
+}
+
+.AutoCtlPoint {
+  fill: none;
+  stroke: blue;
+  stroke-width: 4
+}
+
+.Label {
+  font-size: 22px;
+  font-family: Verdana, serif
+}
