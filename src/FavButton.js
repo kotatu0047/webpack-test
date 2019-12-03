@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { animated } from 'react-spring'
+import { animated, useSpring } from 'react-spring'
 import _ from 'lodash'
 import { red, redSkeleton } from './consts'
+import 'core-js/stable'
+import 'regenerator-runtime/runtime'
 
 const s = _.range(40).map(v => _.range(40))
 
@@ -25,7 +27,23 @@ const rectsX = [
   [7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
   [8, 9, 10, 11, 12, 13, 14, 15],
   [9, 10, 11, 12, 13, 14],
+  [11, 12],
 ]
+
+const maxIndexOfRectsX = rectsX.length - 1
+
+const fillRectsIndexes = _.range(5, maxIndexOfRectsX)
+
+const createFillRectHeightSpringParams = stage => {
+  const threshold = maxIndexOfRectsX - stage
+
+  return fillRectsIndexes.reduce((result, index) => {
+    // eslint-disable-next-line no-param-reassign
+    result[index] = index >= threshold ? 1 : 0
+
+    return result
+  }, {})
+}
 
 /**
  * original path by Material-ui/icons
@@ -33,13 +51,35 @@ const rectsX = [
  * https://material-ui.com/components/material-icons/
  */
 const FavButton = () => {
+  const fillRectHeights = useSpring({
+    from: createFillRectHeightSpringParams(0),
+    to: async next => {
+      for (let i = 1; i <= 15; i += 1) {
+        await next(createFillRectHeightSpringParams(i))
+      }
+    },
+    config: {
+      mass: 1,
+      tension: 6000,
+      friction: 1,
+      clamp: true,
+    },
+  })
+
   return (
     <svg className="svg-root">
       {rectsX.map((row, index) => {
+        console.log(index)
+
         return (
           <g fill="red" key={index}>
             {row.map(col => (
-              <rect width={1} height={1} x={col} y={index} />
+              <animated.rect
+                height={fillRectHeights[index]}
+                width={1}
+                x={col}
+                y={index}
+              />
             ))}
           </g>
         )
