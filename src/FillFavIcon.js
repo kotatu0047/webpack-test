@@ -2,7 +2,7 @@ import React from 'react'
 import { pink } from './consts'
 
 /**
- * original path by Material-ui/icons
+ * original path by Material design icons
  *    https://material.io/resources/icons/?icon=favorite&style=outline
  */
 const FillFavIcon = () => {

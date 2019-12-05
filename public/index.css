@@ -15,15 +15,10 @@ body,
   width: 1em;
   height: 1em;
   display: inline-block;
-  /*font-size: 4rem;*/
-  /*transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;*/
   flex-shrink: 0;
   user-select: none;
   margin: 100px;
-  /*height: 50vh;*/
-  /*width: 50vw;*/
   overflow: visible;
-  /*background-color: #212121;*/
 }
 
 .flash {
@@ -78,12 +73,41 @@ body,
   }
 }
 
+.ripple {
+  transform-origin: center;
+  animation-name: ripple;
+  animation-duration: 300ms;
+  animation-timing-function: ease-in-out;
+  animation-delay: 0ms;
+  animation-fill-mode: forwards;
+  transform: scale(0, 0);
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0, 0);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.5, 0.5);
+    opacity: 1;
+  }
+  85% {
+    transform: scale(0.9, 0.9);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1, 1);
+    opacity: 0;
+  }
+}
+
 .bound-scale {
   transform-origin: center;
   animation-name: bound-scale;
   animation-duration: 300ms;
   animation-timing-function: ease-in-out;
-  animation-delay: 1000ms;
+  animation-delay: 300ms;
   animation-fill-mode: forwards;
   transform: scale(0, 0);
 }
