@@ -130,6 +130,42 @@ body,
   }
 }
 
+.firework1 {
+  animation-name: firework-opacity;
+  animation-duration: 50ms;
+  animation-timing-function: linear;
+  animation-delay: 550ms;
+  animation-fill-mode: forwards;
+  opacity: 0;
+}
+
+.firework2 {
+  animation-name: firework-opacity;
+  animation-duration: 50ms;
+  animation-timing-function: linear;
+  animation-delay: 750ms;
+  animation-fill-mode: forwards;
+  opacity: 0;
+}
+
+.firework3 {
+  animation-name: firework-opacity;
+  animation-duration: 50ms;
+  animation-timing-function: linear;
+  animation-delay: 950ms;
+  animation-fill-mode: forwards;
+  opacity: 0;
+}
+
+@keyframes firework-opacity {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 .Border {
   fill: none;
   stroke: blue;

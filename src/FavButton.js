@@ -1,13 +1,10 @@
 import React, { useCallback, useState } from 'react'
-import { animated, useSpring } from 'react-spring'
-import _ from 'lodash'
 import 'core-js/stable'
 import 'regenerator-runtime/runtime'
 import FillFavIcon from './FillFavIcon'
 import BorderFavIcon from './BorderFavIcon'
-import { black, blue, pink } from './consts'
-
-const s = _.range(40).map(v => _.range(40))
+import Fireworks from './Fireworks'
+import { black, blue, deepPink, pink } from './consts'
 
 /**
  * original path by Material-ui/icons
@@ -40,7 +37,7 @@ const FavButton = () => {
         fontSize="2rem"
       >
         {!toggle && <BorderFavIcon color={isHover ? pink : black} />}
-        {toggle && <FillFavIcon />}
+        {toggle && <FillFavIcon color={isHover ? deepPink : pink} />}
 
         {toggle && (
           <>
@@ -65,15 +62,7 @@ const FavButton = () => {
           </>
         )}
 
-        {s.map((row, index) => {
-          return (
-            <g fill="none" stroke="red" strokeWidth={0.1} key={index}>
-              {row.map(col => (
-                <rect width={1} height={1} x={col} y={index} key={col} />
-              ))}
-            </g>
-          )
-        })}
+        {toggle && <Fireworks />}
       </svg>
     </div>
   )
