@@ -6,11 +6,6 @@ import BorderFavIcon from './BorderFavIcon'
 import Fireworks from './Fireworks'
 import { black, blue, deepPink, pink } from './consts'
 
-/**
- * original path by Material-ui/icons
- *      from '@material-ui/icons/FavoriteBorderOutlined'
- * https://material-ui.com/components/material-icons/
- */
 const FavButton = () => {
   const [isHover, setIsHover] = useState(false)
   const handleMouseOver = useCallback(() => setIsHover(true), [setIsHover])
@@ -21,7 +16,6 @@ const FavButton = () => {
 
   return (
     // TODO jsx-a11y/mouse-events-have-key-events
-    //   花火
     // 大きさ指定 small madame leary  (任意のfontsize)
     <div
       onMouseOver={handleMouseOver}
