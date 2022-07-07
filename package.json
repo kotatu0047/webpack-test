@@ -42,7 +42,7 @@
     "core-js": "^3.4.8",
     "js-cookie": "^2.2.1",
     "lodash": "^4.17.15",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "pocket-cookie": "0.0.1-beta",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
